@@ -1,0 +1,15 @@
+#! /bin/bash -e
+#
+# Publish Base Docker image
+
+cd $(dirname $0)/../base-image
+
+VERSION=$(TZ=Asia/Shanghai date +'%Y%m%d%H%M')
+
+# Build the image
+docker build -t 415148673/ruby-node-base-image:${VERSION} .
+
+# Release to new registry
+docker push 415148673/ruby-node-base-image:${VERSION}
+docker tag 415148673/ruby-node-base-image:${VERSION} 415148673/ruby-node-base-image:latest
+docker push 415148673/ruby-node-base-image:latest

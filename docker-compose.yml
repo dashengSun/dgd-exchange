@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+  dev:
+    image: 415148673/ruby-node-base-image@sha256:d0406606602f9e9d48aa8e4cf1b86d6bf15c285a1492e54d8b8111b21ddd8a4a
+    environment:
+      - RACK_ENV=production
+      - YUNBI_API_ENDPOINT=https://yunbi.com/api/v2
+      - BITTREX_API_ENDPOINT=https://bittrex.com/api/v1.1
+    volumes:
+      - .:/app
+      - ruby2.3-bundle-cache:/usr/local/bundle
+    working_dir: /app
+    ports:
+      - "5000:5000"
+    command: rake watch
+volumes:
+  ruby2.3-bundle-cache:
+    external: true

@@ -1,0 +1,2 @@
+#! /bin/sh
+exec puma -p ${PORT-5000}
