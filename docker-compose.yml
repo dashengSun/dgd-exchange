@@ -2,7 +2,7 @@ version: "2"
 
 services:
   dev:
-    image: 415148673/ruby-node-base-image@sha256:d0406606602f9e9d48aa8e4cf1b86d6bf15c285a1492e54d8b8111b21ddd8a4a
+    image: 415148673/ruby-node-base-image@sha256:411a2e26da1e97f3d01e965b5511378aa9c2163c70d3b44d1ae24544c668ba9f
     environment:
       - RACK_ENV=production
       - YUNBI_API_ENDPOINT=https://yunbi.com/api/v2

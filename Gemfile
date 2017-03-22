@@ -7,6 +7,7 @@ gem 'uglifier'
 gem 'sprockets'
 gem 'httparty'
 gem 'data.either'
+gem 'json'
 
 group :development do
   gem 'shotgun'

@@ -73,6 +73,7 @@ PLATFORMS
 DEPENDENCIES
   data.either
   httparty
+  json
   pry
   puma
   rack-test
@@ -88,4 +89,4 @@ DEPENDENCIES
   uglifier
 
 BUNDLED WITH
-   1.13.1
+   1.14.6

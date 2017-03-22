@@ -13,6 +13,14 @@ class YunbiApi
     response
   end
 
+  def fetch_order_book market
+    response = self.class.get("/order_book.json", {
+      :headers => {'Content-Type' => 'application/json', 'Accept' => 'application/json'},
+      :query => {'market' => market}
+    })
+    response
+  end
+
 end
 
 class YunbiApiError < StandardError ; end

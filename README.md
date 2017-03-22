@@ -1,6 +1,6 @@
 # This is for dgd exchange
 ```
-docker-compose up
+auto/dev
 ```
 
 ```

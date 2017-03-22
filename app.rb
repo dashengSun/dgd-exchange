@@ -13,7 +13,8 @@ end
 
 
 get "#{DGD_EXCHANGE_URL}/refresh/?" do
-  response = call_api
+  response = call_market_api
+  order_book_response = call_order_book_api
 
   yunbi_dgd_bid = response[:yunbi_dgd]['ticker']['buy']
   yunbi_dgd_ask = response[:yunbi_dgd]['ticker']['sell']
@@ -65,7 +66,7 @@ def error_response(error)
   raise error
 end
 
-def call_api
+def call_market_api
   yunbi_dgd = YunbiApi.new.fetch_market_exchange('dgdcny')
   yunbi_eth = YunbiApi.new.fetch_market_exchange('ethcny')
 
@@ -82,4 +83,18 @@ def call_api
     :bittrex_dgd => bittrex_dgd,
     :bittrex_eth => bittrex_eth
   }
+end
+
+def call_order_book_api
+  yunbi_dgd_order_book = YunbiApi.new.fetch_order_book('dgdcny')
+
+
+
+  yunbi_eth_order_book = YunbiApi.new.fetch_order_book('ethcny')
+
+  bittrex_dgd_order_book = BittrexApi.new.fetch_order_book('BTC-DGD')
+  bittrex_eth_order_book = BittrexApi.new.fetch_order_book('BTC-ETH')
+  puts yunbi_dgd_order_book,yunbi_eth_order_book
+  puts '===========++++++++++++++==========='
+  puts bittrex_dgd_order_book, bittrex_eth_order_book
 end
