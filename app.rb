@@ -7,7 +7,7 @@ require_relative 'app/repositories/bittrex_api'
 ENVIRONMENT = {API_ENDPOINT: ENV['API_ENDPOINT']}
 DGD_EXCHANGE_URL = '/exchange'
 
-get "#{DGD_EXCHANGE_URL}/new/?" do
+get "/?" do
   erb exchange(:index)
 end
 
@@ -15,7 +15,14 @@ get "#{DGD_EXCHANGE_URL}/refresh/?" do
   market_response = call_market_api
   order_book_response = call_order_book_api
 
-  market_data(market_response) + "\n" + order_book_data(order_book_response)
+  market = market_data(market_response)
+  order = order_book_data(order_book_response)
+
+  content_type :json
+  {
+    market: market,
+    order: order
+  }.to_json
 end
 
 error 400 do
@@ -114,8 +121,15 @@ def market_data(response)
   bittrex_dgd_eth_buy = (bittrex_dgd_ask.to_f / bittrex_eth_bid.to_f).round(6)
   bittrex_dgd_eth_sell = (bittrex_dgd_bid.to_f / bittrex_eth_ask.to_f).round(6)
 
-  "yunbi买价: #{yunbi_dgd_eth_buy}, yunbi卖价: #{yunbi_dgd_eth_sell}" + "\n" +
+  puts "yunbi买价: #{yunbi_dgd_eth_buy}, yunbi卖价: #{yunbi_dgd_eth_sell}" + "\n" +
     "bittrex买价: #{bittrex_dgd_eth_buy}, bittrex卖价: #{bittrex_dgd_eth_sell}"
+
+  {
+    yunbi_dgd_eth_buy: yunbi_dgd_eth_buy,
+    yunbi_dgd_eth_sell: yunbi_dgd_eth_sell,
+    bittrex_dgd_eth_buy: bittrex_dgd_eth_buy,
+    bittrex_dgd_eth_sell: bittrex_dgd_eth_sell
+  }
 end
 
 def order_book_data response
@@ -137,6 +151,13 @@ def order_book_data response
   bittrex_dgd_eth_average_100_buy = (bittrex_dgd_average_100_ask.to_f / bittrex_eth_average_100_bid.to_f).round(6)
   bittrex_dgd_eth_average_100_sell = (bittrex_dgd_average_100_bid.to_f / bittrex_eth_average_100_ask.to_f).round(6)
 
-  "yunbi 100个DGD的平均买价: #{yunbi_dgd_eth_average_100_buy}, yunbi 100个DGD的平均卖价: #{yunbi_dgd_eth_average_100_sell}" + "\n" +
+  puts "yunbi 100个DGD的平均买价: #{yunbi_dgd_eth_average_100_buy}, yunbi 100个DGD的平均卖价: #{yunbi_dgd_eth_average_100_sell}" + "\n" +
     "bittrex 100个DGD的平均买价: #{bittrex_dgd_eth_average_100_buy}, bittrex 100个DGD的平均卖价: #{bittrex_dgd_eth_average_100_sell}"
+
+  {
+    yunbi_dgd_eth_average_100_buy: yunbi_dgd_eth_average_100_buy,
+    yunbi_dgd_eth_average_100_sell: yunbi_dgd_eth_average_100_sell,
+    bittrex_dgd_eth_average_100_buy: bittrex_dgd_eth_average_100_buy,
+    bittrex_dgd_eth_average_100_sell: bittrex_dgd_eth_average_100_sell
+  }
 end
