@@ -11,16 +11,12 @@ const Exchange = props => {
       <h1>{props.lastHandshakeDate}</h1>
 
       <h1>置顶的交易:</h1>
-      <p>yunbi买价: {props.yunbi_dgd_eth_buy}</p>
-      <p>yunbi卖价: {props.yunbi_dgd_eth_sell}</p>
-      <p>bittrex买价: {props.bittrex_dgd_eth_buy}</p>
-      <p>bittrex卖价: {props.bittrex_dgd_eth_sell}</p>
+      <p>yunbi买价: {props.yunbi_dgd_eth_buy}, yunbi卖价: {props.yunbi_dgd_eth_sell}</p>
+      <p>bittrex买价: {props.bittrex_dgd_eth_buy}, bittrex卖价: {props.bittrex_dgd_eth_sell}</p>
 
       <h1>前100的交易:</h1>
-      <p>yunbi 100个DGD的平均买价: {props.yunbi_dgd_eth_average_100_buy}</p>
-      <p>yunbi 100个DGD的平均卖价: {props.yunbi_dgd_eth_average_100_sell}</p>
-      <p>bittrex 100个DGD的平均买价: {props.bittrex_dgd_eth_average_100_buy}</p>
-      <p>bittrex 100个DGD的平均卖价: {props.bittrex_dgd_eth_average_100_sell}</p>
+      <p>yunbi 100个DGD的平均买价: {props.yunbi_dgd_eth_average_100_buy}, yunbi 100个DGD的平均卖价: {props.yunbi_dgd_eth_average_100_sell}</p>
+      <p>bittrex 100个DGD的平均买价: {props.bittrex_dgd_eth_average_100_buy}, bittrex 100个DGD的平均卖价: {props.bittrex_dgd_eth_average_100_sell}</p>
     </div>
   );
 };

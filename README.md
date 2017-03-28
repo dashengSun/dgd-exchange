@@ -4,5 +4,5 @@ auto/dev
 ```
 
 ```
-http://localhost:5000/exchange/refresh
+http://localhost:5000
 ```
