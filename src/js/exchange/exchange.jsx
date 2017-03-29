@@ -17,6 +17,11 @@ const Exchange = props => {
       <h1>前100的交易:</h1>
       <p>yunbi 100个DGD的平均买价: {props.yunbi_dgd_eth_average_100_buy}, yunbi 100个DGD的平均卖价: {props.yunbi_dgd_eth_average_100_sell}</p>
       <p>bittrex 100个DGD的平均买价: {props.bittrex_dgd_eth_average_100_buy}, bittrex 100个DGD的平均卖价: {props.bittrex_dgd_eth_average_100_sell}</p>
+
+      <h1>建议交易:</h1>
+      <p className="trade" color="ea320e">{props.tradeDataMap}</p>
+      <p className="trade" color="ea320e">{props.tradeDataBuySell}</p>
+      <p className="trade" color="ea320e">{props.tradeDataProfit}</p>
     </div>
   );
 };
@@ -27,7 +32,15 @@ function getTime() {
 
 export default connect(intent$ => {
   let sink$ = intent$.map(Intent.case({
+    TradeData: (map, buySell, profit) => {
+      return state => ({
+        tradeDataMap: map,
+        tradeDataBuySell: buySell,
+        tradeDataProfit: profit
+      })
+    },
     ReceiveData: data => {
+      var beep = new Audio( 'https://mikevanrossum.nl/stuff/doorbell.mp3' )
       // const data = JSON.parse(msg);
       console.log("---------------------")
       console.log(data)
@@ -39,17 +52,25 @@ export default connect(intent$ => {
         if (data.market.yunbi_dgd_eth_sell > data.market.bittrex_dgd_eth_buy) {
           let profit = (data.market.yunbi_dgd_eth_sell - data.market.bittrex_dgd_eth_buy) / data.market.yunbi_dgd_eth_sell
           if (profit > 0.005) {
-            alert("可交易,卖出云币DGD -> RMB -> ETH => (ETH)B网 -> BTC -> 买入B网DGD" + "\n" +
-              `yunbi卖价: ${data.market.yunbi_dgd_eth_sell}, bittrex买价: ${data.market.bittrex_dgd_eth_buy}` + "\n" +
-              `盈利率: ${profit * 100}%`)
+            beep.play()
+            // alert("可交易,卖出云币DGD -> RMB -> ETH => (ETH)B网 -> BTC -> 买入B网DGD" + "\n" +
+            //   `yunbi卖价: ${data.market.yunbi_dgd_eth_sell}, bittrex买价: ${data.market.bittrex_dgd_eth_buy}` + "\n" +
+            //   `盈利率: ${profit * 100}%`)
+            intent$.send(Intent.TradeData("可交易,卖出云币DGD -> RMB -> ETH => (ETH)B网 -> BTC -> 买入B网DGD",
+              `yunbi卖价: ${data.market.yunbi_dgd_eth_sell}, bittrex买价: ${data.market.bittrex_dgd_eth_buy}`,
+              `盈利率: ${profit * 100}%`));
           }
         }
         if (data.market.bittrex_dgd_eth_sell > data.market.yunbi_dgd_eth_buy) {
           let profit = (data.market.bittrex_dgd_eth_sell - data.market.yunbi_dgd_eth_buy) / data.market.bittrex_dgd_eth_sell
           if (profit > 0.005) {
-            alert("可交易,卖出B网DGD ->BTC -> ETH => (ETH)云币 -> RMB -> 买入云币DGD" + "\n" +
-              `bittrex卖价: ${data.market.bittrex_dgd_eth_sell}, yunbi买价: ${data.market.yunbi_dgd_eth_buy}` + "\n" +
-              `盈利率: ${profit * 100}%`)
+            beep.play()
+            // alert("可交易,卖出B网DGD ->BTC -> ETH => (ETH)云币 -> RMB -> 买入云币DGD" + "\n" +
+            //   `bittrex卖价: ${data.market.bittrex_dgd_eth_sell}, yunbi买价: ${data.market.yunbi_dgd_eth_buy}` + "\n" +
+            //   `盈利率: ${profit * 100}%`)
+            intent$.send(Intent.TradeData("可交易,卖出B网DGD ->BTC -> ETH => (ETH)云币 -> RMB -> 买入云币DGD",
+              `bittrex卖价: ${data.market.bittrex_dgd_eth_sell}, yunbi买价: ${data.market.yunbi_dgd_eth_buy}`,
+              `盈利率: ${profit * 100}%`));
           }
         }
 
@@ -57,17 +78,25 @@ export default connect(intent$ => {
         if (data.order.yunbi_dgd_eth_average_100_sell > data.order.bittrex_dgd_eth_average_100_buy) {
           let profit = (data.order.yunbi_dgd_eth_average_100_sell - data.order.bittrex_dgd_eth_average_100_buy) / data.order.yunbi_dgd_eth_average_100_sell
           if (profit > 0.005) {
-            alert("可交易,卖出云币前100个DGD -> RMB -> ETH => (ETH)B网 -> BTC -> 买入B网前100个DGD" + "\n" +
-              `yunbi前100平均卖价: ${data.order.yunbi_dgd_eth_average_100_sell}, bittrex前100平均买价: ${data.order.bittrex_dgd_eth_average_100_buy}` + "\n" +
-              `盈利率: ${profit * 100}%`)
+            beep.play()
+            // alert("可交易,卖出云币前100个DGD -> RMB -> ETH => (ETH)B网 -> BTC -> 买入B网前100个DGD" + "\n" +
+            //   `yunbi前100平均卖价: ${data.order.yunbi_dgd_eth_average_100_sell}, bittrex前100平均买价: ${data.order.bittrex_dgd_eth_average_100_buy}` + "\n" +
+            //   `盈利率: ${profit * 100}%`)
+            intent$.send(Intent.TradeData("可交易,卖出云币前100个DGD -> RMB -> ETH => (ETH)B网 -> BTC -> 买入B网前100个DGD",
+              `yunbi前100平均卖价: ${data.order.yunbi_dgd_eth_average_100_sell}, bittrex前100平均买价: ${data.order.bittrex_dgd_eth_average_100_buy}`,
+              `盈利率: ${profit * 100}%`));
           }
         }
         if (data.order.bittrex_dgd_eth_average_100_sell > data.order.yunbi_dgd_eth_average_100_buy) {
           let profit = (data.order.bittrex_dgd_eth_average_100_sell - data.order.yunbi_dgd_eth_average_100_buy) / data.order.bittrex_dgd_eth_average_100_sell
           if (profit > 0.005) {
-            alert("可交易,卖出B网前100个DGD ->BTC -> ETH => (ETH)云币 -> RMB -> 买入云币前100个DGD" + "\n" +
-              `bittrex前100平均卖价: ${data.order.bittrex_dgd_eth_average_100_sell}, yunbi前100平均买价: ${data.order.yunbi_dgd_eth_average_100_buy}` + "\n" +
-              `盈利率: ${profit * 100}%`)
+            beep.play()
+            // alert("可交易,卖出B网前100个DGD ->BTC -> ETH => (ETH)云币 -> RMB -> 买入云币前100个DGD" + "\n" +
+            //   `bittrex前100平均卖价: ${data.order.bittrex_dgd_eth_average_100_sell}, yunbi前100平均买价: ${data.order.yunbi_dgd_eth_average_100_buy}` + "\n" +
+            //   `盈利率: ${profit * 100}%`)
+            intent$.send(Intent.TradeData("可交易,卖出B网前100个DGD ->BTC -> ETH => (ETH)云币 -> RMB -> 买入云币前100个DGD",
+              `bittrex前100平均卖价: ${data.order.bittrex_dgd_eth_average_100_sell}, yunbi前100平均买价: ${data.order.yunbi_dgd_eth_average_100_buy}`,
+              `盈利率: ${profit * 100}%`));
           }
         }
 
